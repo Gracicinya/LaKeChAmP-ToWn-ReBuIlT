@@ -1,20 +1,21 @@
-# Town Map Puzzle Game
-# ====================
-# A drag-and-drop puzzle game where you assemble a map of the town.
-# The puzzle pieces are sliced from the image of the town map.
+"""
+Town Map Puzzle Game
+====================
+A drag-and-drop puzzle game where you assemble a map of the town.
+The puzzle pieces are sliced from the image of the town map.
 
-# HOW TO PLAY:
-#   - Click and drag a puzzle piece from the left tray
-#   - Drop it onto the matching spot on the board
-#   - If correct, it snaps into place
-#   - Place all pieces correctly to win!
+HOW TO PLAY:
+  - Click and drag a puzzle piece from the left tray
+  - Drop it onto the matching spot on the board
+  - If correct, it snaps into place
+  - Place all pieces correctly to win!
 
-# CONTROLS:
-#   R = restart / reshuffle
+CONTROLS:
+  R = restart / reshuffle
 
-# REQUIREMENTS:
-#   pip install pygame
-
+REQUIREMENTS:
+  pip install pygame
+"""
 
 import pygame
 import sys
@@ -24,7 +25,7 @@ import os
 # ══════════════════════════════════════════════════════════════════════════════
 #  Map image
 # ══════════════════════════════════════════════════════════════════════════════
-MAP_IMAGE_PATH = "still_donut.png"
+MAP_IMAGE_PATH = "community_map.jpg"
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── Initialise ────────────────────────────────────────────────────────────────
@@ -55,7 +56,6 @@ BG_COLOUR   = ( 34,  140,  200)
 BOARD_BG    = ( 44,  52,  63)
 TRAY_BG     = ( 25,  30,  38)
 GREEN       = ( 72, 199, 142)
-SLOT_COLOUR = ( 55,  65,  80)
 HELD_YELLOW = (255, 210,  80)
 LABEL_COL   = (180, 190, 200)
 
@@ -126,6 +126,14 @@ if map_tiles is None:
     # Use coloured fallback tiles
     map_tiles = [make_fallback_tile(i, TILE_SIZE) for i in range(COLS * ROWS)]
 
+# ── Reference image ───────────────────────────────────────────────────────────
+script_dir      = os.path.dirname(os.path.abspath(__file__))
+full_path       = os.path.join(script_dir, MAP_IMAGE_PATH)
+reference_image = pygame.image.load(full_path).convert_alpha()
+ref_w           = COLS * TILE_SIZE
+ref_h           = ROWS * TILE_SIZE
+reference_image = pygame.transform.scale(reference_image, (ref_w, ref_h))
+reference_image.set_alpha(60)   # 0 = invisible, 255 = fully opaque, 60 = low opacity
 
 # ── Puzzle Piece ──────────────────────────────────────────────────────────────
 class Piece:
@@ -169,10 +177,8 @@ class Slot:
             # Show the correctly placed image
             surface.blit(piece.image, self.rect)
         else:
-            # Empty slot: dark fill + dashed-style border + name hint
-            pygame.draw.rect(surface, SLOT_COLOUR, self.rect)
-            pygame.draw.rect(surface, MID_GREY,    self.rect, width=2, border_radius=4)
-
+                    # Empty slot: border only, reference image shows through
+                    pygame.draw.rect(surface, MID_GREY, self.rect, width=2, border_radius=4)
 
 # ── Build game objects ────────────────────────────────────────────────────────
 slots  = [Slot(i)  for i in range(COLS * ROWS)]
@@ -233,6 +239,9 @@ def draw():
 
     title = font_med.render("TOWN MAP", True, LABEL_COL)
     screen.blit(title, (board_rect.centerx - title.get_width()//2, board_rect.y + 10))
+
+    # ── Reference image (low opacity, under pieces) ───────────────────────────
+    screen.blit(reference_image, (BOARD_X, BOARD_Y))
 
     # ── Slots ─────────────────────────────────────────────────────────────
     for slot in slots:
