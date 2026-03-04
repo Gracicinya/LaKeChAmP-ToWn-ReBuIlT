@@ -10,3 +10,12 @@ Hints: Show an outline of available slots.
 """
 
 import pygame
+
+def main():
+    pass
+
+def run_placement_game():
+    return main()
+
+if __name__ == "__main__":
+    main()

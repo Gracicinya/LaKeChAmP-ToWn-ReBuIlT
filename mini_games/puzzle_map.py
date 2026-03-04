@@ -27,13 +27,13 @@ import os
 # ══════════════════════════════════════════════════════════════════════════════
 #  Map image
 # ══════════════════════════════════════════════════════════════════════════════
-MAP_IMAGE_PATH = "community_map.jpg"
+MAP_IMAGE_PATH = "../community_map.jpg"
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── Initialise ────────────────────────────────────────────────────────────────
 pygame.init()
 
-SCREEN_W, SCREEN_H = 960, 640
+SCREEN_W, SCREEN_H = 900, 640
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 pygame.display.set_caption("Town Map Puzzle")
 clock = pygame.time.Clock()
@@ -261,7 +261,7 @@ def draw():
         held_piece.draw(screen, held=True)
 
     # ── Controls hint ─────────────────────────────────────────────────────
-    hint = font_small.render("R = restart", True, DARK_GREY)
+    hint = font_small.render("R = restart  |  Drag pieces to solve puzzle", True, DARK_GREY)
     screen.blit(hint, (SCREEN_W - hint.get_width() - 10, SCREEN_H - 20))
 
     # ── Win overlay ───────────────────────────────────────────────────────
@@ -275,7 +275,13 @@ def draw():
             center_x, center_y = SCREEN_W // 2, SCREEN_H // 2
             win_title = font_big.render("🎉  Puzzle Complete!  🎉", True, GREEN)
             win_subtitle = font_med.render("You've revealed the ideal town map.", True, WHITE)
-            win_restart = font_small.render("Press  R  to play again", True, LABEL_COL)
+            
+            # Show different text based on whether return option is available
+            if win_timer > 600:
+                win_restart = font_small.render("R = play again  |  ENTER/SPACE = return to story", True, GREEN)
+            else:
+                win_restart = font_small.render("R = play again", True, LABEL_COL)
+            
             screen.blit(win_title, win_title.get_rect(center=(center_x, center_y - 44)))
             screen.blit(win_subtitle, win_subtitle.get_rect(center=(center_x, center_y +  8)))
             screen.blit(win_restart, win_restart.get_rect(center=(center_x, center_y + 48)))
@@ -360,6 +366,17 @@ def main():
             # ── Draw ──────────────────────────────────────────────────────────────
             draw()
 
+            # Check if player wants to return to storybook (after win)
+            if complete and win_timer > 600:  # Wait a bit after win screen
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_RETURN] or keys[pygame.K_SPACE]:
+                    return True  # Return to main game
+
+
+# ── Main function that can be called from main.py ────────────────────────────
+def run_puzzle_game():
+    """Run the puzzle game and return True when complete."""
+    return main()
 
 
 if __name__ == "__main__":
