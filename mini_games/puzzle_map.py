@@ -10,10 +10,12 @@ HOW TO PLAY:
   - If correct, it snaps into place
   - Place all pieces correctly to win!
 
-CONTROLS:
+Controls:
   R = restart / reshuffle
 
-REQUIREMENTS:
+Hint:  Flash the image of one target location briefly.
+
+Requirements:
   pip install pygame
 """
 
