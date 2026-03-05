@@ -76,7 +76,7 @@ STORY_PAGES = [
     },
 
     {
-        "text": "The engineers need to navigate the town safely.\n\n Help them avoid the cars and obstacles",
+        "text": "One resident needs to navigate the town safely.\n\n Help them avoid the cars and obstacles",
         "bg_color": (100, 130, 100),
         "mini_game": "road_crossing"
     },

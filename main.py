@@ -54,7 +54,7 @@ in_mini_game = False
 # Define colors, fonts, and other constants
 # Define the GameState class to manage game state across scenes
 
-def GameState():
+class GameState():
     def __init__(self):
         self.current_page = 0
         self.completed_games = []
@@ -71,6 +71,7 @@ def init():
     pygame.display.set_caption("The Remaking of Lakechamp Town")
     FPS = 60
     clock = pygame.time.Clock()
+    state = GameState()
 
     # Initialize the storybook
     storybook = Storybook()
@@ -100,6 +101,7 @@ def init():
     resident4_image = pygame.Surface((50, 50))  # Placeholder for resident 4 image
     resident4_image.fill((255, 255, 0))  # Yellow square for resident 4
     """I will update the above placeholders and load actual images for the residents when available."""
+    end = False
 # ══════════════════════════════════════════════════════════════════════════════
 #  Update
 # ══════════════════════════════════════════════════════════════════════════════
@@ -192,16 +194,11 @@ def MainLoop():
         Draw()
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  Run the game
+#  Run the game and Quit
 # ══════════════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     init()
     MainLoop()
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Quit
-# ══════════════════════════════════════════════════════════════════════════════
-
     pygame.quit()
     sys.exit()
